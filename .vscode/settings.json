@@ -1,0 +1,71 @@
+{
+  "latex-workshop.latex.tools": [
+    {
+      "name": "latexmk (pLaTeX -> dvipdfmx)",
+      "command": "latexmk",
+      "args": [
+        "-pdfdvi",
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "%DOC%"
+      ]
+    },
+    {
+      "name": "platex",
+      "command": "platex",
+      "args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "-output-directory=%OUTDIR%",
+        "%DOC%"
+      ]
+    },
+    {
+      "name": "dvipdfmx",
+      "command": "dvipdfmx",
+      "args": [
+        "-o",
+        "%OUTDIR%/%DOCFILE%.pdf",
+        "%OUTDIR%/%DOCFILE%.dvi"
+      ]
+    },
+    {
+      "name": "pbibtex",
+      "command": "pbibtex",
+      "args": [
+        "%OUTDIR%/%DOCFILE%"
+      ]
+    }
+  ],
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "latexmk (pLaTeX -> dvipdfmx)",
+      "tools": [
+        "latexmk (pLaTeX -> dvipdfmx)"
+      ]
+    },
+    {
+      "name": "platex -> dvipdfmx",
+      "tools": [
+        "platex",
+        "dvipdfmx"
+      ]
+    },
+    {
+      "name": "platex -> pbibtex -> platex*2 -> dvipdfmx",
+      "tools": [
+        "platex",
+        "pbibtex",
+        "platex",
+        "platex",
+        "dvipdfmx"
+      ]
+    }
+  ],
+  "latex-workshop.latex.outDir": "out",
+  "latex-workshop.latex.autoBuild.run": "onSave",
+  "latex-workshop.view.pdf.viewer": "tab",
+  "latex-workshop.synctex.afterBuild.enabled": true
+}
