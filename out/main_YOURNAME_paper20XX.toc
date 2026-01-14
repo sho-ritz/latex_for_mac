@@ -1,49 +1,53 @@
 \contentsline {chapter}{内容梗概}{i}{}%
 \contentsline {chapter}{\numberline {第1章}序論}{1}{}%
 \contentsline {section}{\numberline {1.1}研究背景}{1}{}%
-\contentsline {section}{\numberline {1.2}本研究の目的}{1}{}%
-\contentsline {section}{\numberline {1.3}本論文の構成}{1}{}%
-\contentsline {chapter}{\numberline {第2章}マトリクスLED表示システムの構築}{3}{}%
-\contentsline {section}{\numberline {2.1}使用デバイスと開発環境}{3}{}%
-\contentsline {subsection}{\numberline {2.1.1}HUB75 64×32 LEDマトリクスの仕様}{3}{}%
-\contentsline {subsection}{\numberline {2.1.2}Raspberry Pi，Webサーバ構成}{4}{}%
-\contentsline {section}{\numberline {2.2}256階調表示システム}{4}{}%
-\contentsline {subsection}{\numberline {2.2.1}RGB各色の点灯回数制御による256階調表現}{4}{}%
-\contentsline {subsection}{\numberline {2.2.2}32×64画像へのリサイズとマッピング処理}{5}{}%
-\contentsline {subsection}{\numberline {2.2.3}Webサイトからの画像アップロード～パネル表示までの処理フロー}{6}{}%
-\contentsline {section}{\numberline {2.3}表示品質評価}{6}{}%
-\contentsline {subsection}{\numberline {2.3.1}はじめに}{7}{}%
-\contentsline {subsection}{\numberline {2.3.2}淡い色が表現しにくい要因の考察}{7}{}%
-\contentsline {subsection}{\numberline {2.3.3}ガンマ補正}{7}{}%
-\contentsline {section}{\numberline {2.4}小括}{8}{}%
-\contentsline {chapter}{\numberline {第3章}LEDマトリクスのフリッカ周波数差を用いたカメラベース可視光通信方式}{9}{}%
-\contentsline {section}{\numberline {3.1}提案方式の概要}{9}{}%
-\contentsline {section}{\numberline {3.2}送信側ハードウェア・ソフトウェア構成}{9}{}%
-\contentsline {subsection}{\numberline {3.2.1}HUB75走査の制御ロジック}{9}{}%
-\contentsline {subsection}{\numberline {3.2.2}Cコード実装とシンボル列の構成}{11}{}%
-\contentsline {section}{\numberline {3.3}バランス符号による色味差低減}{11}{}%
-\contentsline {subsection}{\numberline {3.3.1}naive方式で生じる色味差の問題}{11}{}%
-\contentsline {subsection}{\numberline {3.3.2}平均デューティ50\%のバランス符号設計}{11}{}%
-\contentsline {section}{\numberline {3.4}シンボル設計と同期語}{11}{}%
-\contentsline {subsection}{\numberline {3.4.1}preambleシンボル列による同期取得}{11}{}%
-\contentsline {subsection}{\numberline {3.4.2}同期語とシンボル境界推定}{11}{}%
-\contentsline {subsection}{\numberline {3.4.3}理論スループットの算出}{11}{}%
-\contentsline {section}{\numberline {3.5}受信アルゴリズム}{11}{}%
-\contentsline {subsection}{\numberline {3.5.1}フレーム列からの時系列データ生成}{12}{}%
-\contentsline {subsection}{\numberline {3.5.2}bitパターンとの類似度評価と位相推定}{12}{}%
-\contentsline {subsection}{\numberline {3.5.3}復号フロー全体}{12}{}%
-\contentsline {section}{\numberline {3.6}実装コードと最適化}{12}{}%
-\contentsline {section}{\numberline {3.7}小括}{12}{}%
-\contentsline {chapter}{\numberline {第4章}評価および考察}{13}{}%
-\contentsline {section}{\numberline {4.1}実験条件}{13}{}%
-\contentsline {section}{\numberline {4.2}人間の視覚における見え方の評価}{13}{}%
-\contentsline {subsection}{\numberline {4.2.1}旧方式と提案方式の色味の比較}{13}{}%
-\contentsline {subsection}{\numberline {4.2.2}白色との色差評価}{13}{}%
-\contentsline {section}{\numberline {4.3}通信性能評価}{13}{}%
-\contentsline {subsection}{\numberline {4.3.1}ビット誤り率と同期成功率の評価}{13}{}%
-\contentsline {subsection}{\numberline {4.3.2}送信可能な情報量と必要時間の試算}{13}{}%
-\contentsline {section}{\numberline {4.4}考察}{13}{}%
-\contentsline {section}{\numberline {4.5}結論および今後の課題}{13}{}%
-\contentsline {chapter}{参考文献}{13}{}%
-\contentsline {chapter}{謝辞}{17}{}%
-\contentsline {chapter}{発表論文リスト}{19}{}%
+\contentsline {section}{\numberline {1.2}本研究の目的}{2}{}%
+\contentsline {section}{\numberline {1.3}本論文の構成}{3}{}%
+\contentsline {chapter}{\numberline {第2章}LEDマトリクスパネルを用いた画像表示システムの構築}{5}{}%
+\contentsline {section}{\numberline {2.1}使用デバイスと開発環境}{5}{}%
+\contentsline {subsection}{\numberline {2.1.1}HUB75 64×32 LEDマトリクスの仕様}{5}{}%
+\contentsline {subsection}{\numberline {2.1.2}Raspberry Pi 4と開発環境}{6}{}%
+\contentsline {section}{\numberline {2.2}画像アップロードシステムとネットワーク構成}{8}{}%
+\contentsline {subsection}{\numberline {2.2.1}Webアプリケーション構成（Django）}{8}{}%
+\contentsline {subsection}{\numberline {2.2.2}Cloudflare Tunnelによる外部アクセス}{8}{}%
+\contentsline {subsection}{\numberline {2.2.3}Webシステムの構成}{9}{}%
+\contentsline {subsection}{\numberline {2.2.4}Webサイトからの画像アップロード～パネル表示までの処理フロー}{9}{}%
+\contentsline {section}{\numberline {2.3}256階調表示システム}{10}{}%
+\contentsline {subsection}{\numberline {2.3.1}RGB各色の点灯回数制御による256階調表現}{10}{}%
+\contentsline {subsection}{\numberline {2.3.2}点灯させるタイミングの計算方法}{11}{}%
+\contentsline {subsection}{\numberline {2.3.3}32×64画像へのリサイズとマッピング処理}{12}{}%
+\contentsline {section}{\numberline {2.4}ガンマ補正による画質改善}{14}{}%
+\contentsline {subsection}{\numberline {2.4.1}ガンマ補正}{14}{}%
+\contentsline {chapter}{\numberline {第3章}LEDマトリクスのフリッカ周波数差を用いたカメラベース可視光通信方式}{17}{}%
+\contentsline {section}{\numberline {3.1}提案方式の概要}{17}{}%
+\contentsline {section}{\numberline {3.2}可視光通信のロジック}{17}{}%
+\contentsline {subsection}{\numberline {3.2.1}点灯パターンの設計}{17}{}%
+\contentsline {subsection}{\numberline {3.2.2}バイナリ変換の方法}{18}{}%
+\contentsline {subsection}{\numberline {3.2.3}分割領域における点灯パターンの設計}{19}{}%
+\contentsline {subsection}{\numberline {3.2.4}Cコード実装とシンボル列の構成}{19}{}%
+\contentsline {section}{\numberline {3.3}バランス符号による色味差低減}{19}{}%
+\contentsline {subsection}{\numberline {3.3.1}naive方式で生じる色味差の問題}{19}{}%
+\contentsline {subsection}{\numberline {3.3.2}平均デューティ50\%のバランス符号設計}{19}{}%
+\contentsline {section}{\numberline {3.4}シンボル設計と同期語}{20}{}%
+\contentsline {subsection}{\numberline {3.4.1}preambleシンボル列による同期取得}{20}{}%
+\contentsline {subsection}{\numberline {3.4.2}同期語とシンボル境界推定}{20}{}%
+\contentsline {subsection}{\numberline {3.4.3}理論スループットの算出}{20}{}%
+\contentsline {section}{\numberline {3.5}受信アルゴリズム}{20}{}%
+\contentsline {subsection}{\numberline {3.5.1}フレーム列からの時系列データ生成}{20}{}%
+\contentsline {subsection}{\numberline {3.5.2}bitパターンとの類似度評価と位相推定}{20}{}%
+\contentsline {subsection}{\numberline {3.5.3}復号フロー全体}{20}{}%
+\contentsline {section}{\numberline {3.6}実装コードと最適化}{20}{}%
+\contentsline {section}{\numberline {3.7}小括}{20}{}%
+\contentsline {chapter}{\numberline {第4章}評価および考察}{21}{}%
+\contentsline {section}{\numberline {4.1}実験条件}{21}{}%
+\contentsline {section}{\numberline {4.2}人間の視覚における見え方の評価}{21}{}%
+\contentsline {subsection}{\numberline {4.2.1}旧方式と提案方式の色味の比較}{21}{}%
+\contentsline {subsection}{\numberline {4.2.2}白色との色差評価}{21}{}%
+\contentsline {section}{\numberline {4.3}通信性能評価}{21}{}%
+\contentsline {subsection}{\numberline {4.3.1}ビット誤り率と同期成功率の評価}{21}{}%
+\contentsline {subsection}{\numberline {4.3.2}送信可能な情報量と必要時間の試算}{21}{}%
+\contentsline {section}{\numberline {4.4}考察}{21}{}%
+\contentsline {section}{\numberline {4.5}結論および今後の課題}{21}{}%
+\contentsline {chapter}{参考文献}{21}{}%
+\contentsline {chapter}{謝辞}{25}{}%
+\contentsline {chapter}{発表論文リスト}{27}{}%

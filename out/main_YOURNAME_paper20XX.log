@@ -1,4 +1,4 @@
-This is e-upTeX, Version 3.141592653-p4.1.2-u2.00-250202-2.6 (utf8.euc) (TeX Live 2025) (preloaded format=platex 2025.10.12)  18 DEC 2025 04:53
+This is e-upTeX, Version 3.141592653-p4.1.2-u2.00-250202-2.6 (utf8.euc) (TeX Live 2025) (preloaded format=platex 2025.10.12)  14 JAN 2026 13:02
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -132,16 +132,16 @@ LaTeX Font Info:    ... okay on input line 21.
 
 ]
 LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <12> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 72.
+(Font)              Font shape `JT1/gt/m/n' tried instead on input line 71.
 LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <12> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 72.
+(Font)              Font shape `JY1/gt/m/n' tried instead on input line 71.
 
 
 [1]
 LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <24.88> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 165.
+(Font)              Font shape `JT1/gt/m/n' tried instead on input line 164.
 LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <24.88> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 165.
+(Font)              Font shape `JY1/gt/m/n' tried instead on input line 164.
  (out/main_YOURNAME_paper20XX.toc
 LaTeX Font Info:    Trying to load font information for U+msa on input line 3.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/amsfonts/umsa.fd
@@ -161,9 +161,9 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 
 LaTeX Font Info:    Kanji font shape `JY1/mc/m/sl' undefined
-(Font)              No change on input line 167.
+(Font)              No change on input line 166.
 LaTeX Font Info:    Kanji font shape `JY1/mc/m/sl' undefined
-(Font)              No change on input line 167.
+(Font)              No change on input line 166.
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 16.49998pt.
@@ -194,80 +194,119 @@ LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <17.28> not available
 (Font)              Font shape `JT1/gt/m/n' tried instead on input line 12.
 LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <17.28> not available
 (Font)              Font shape `JY1/gt/m/n' tried instead on input line 12.
-) (./chptr2.tex
+
 
 [1
 
 
 ]
 
-[2
+[2]) (./chptr2.tex
+
+[3]
+
+[4
 
 ]
 第 2 章
 LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <14.4> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 16.
+(Font)              Font shape `JT1/gt/m/n' tried instead on input line 17.
 LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <14.4> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 16.
+(Font)              Font shape `JY1/gt/m/n' tried instead on input line 17.
 File: assets/matrix_led.png Graphic file (type bmp)
 <assets/matrix_led.png>
 
 
-[3]
+[5]
+Underfull \hbox (badness 3907) in paragraph at lines 84--85
+[]\OT1/cmr/m/n/12 Bluetooth 5.0, Blue-tooth Low En-ergy  \JY1/mc/m/n/12 （\OT1/cmr/m/n/12 Cy-press
+ []
+
+
+Overfull \hbox (25.37326pt too wide) in paragraph at lines 52--99
+ [][][][] 
+ []
+
+
+
+[6]
+
+[7]
+File: assets/cloudflare_tunnel.png Graphic file (type bmp)
+<assets/cloudflare_tunnel.png>
+
+Underfull \hbox (badness 10000) in paragraph at lines 129--129
+[][]\OT1/cmr/m/n/10 https://blog.cloudflare.com/getting-cloudflare-tunnels-to-connect-to-the-cloudflare-
+ []
+
+
+
+[8]
+File: assets/web_site.png Graphic file (type bmp)
+<assets/web_site.png>
+File: assets/cloudflare_system.png Graphic file (type bmp)
+<assets/cloudflare_system.png>
+
+
+[9]
 File: assets/256gradation.png Graphic file (type bmp)
 <assets/256gradation.png>
+
+
+[10]
+
+[11]
 File: assets/cat_lighting.jpg Graphic file (type bmp)
 <assets/cat_lighting.jpg>
 
 
-[4]
+[12]
 File: assets/origin_cat.jpg Graphic file (type bmp)
 <assets/origin_cat.jpg>
 File: assets/output_0.45.png Graphic file (type bmp)
 <assets/output_0.45.png>
 
 
-[5]
-File: assets/gamma.png Graphic file (type bmp)
-<assets/gamma.png>
+[13]
+File: assets/gamma_explain.jpg Graphic file (type bmp)
+<assets/gamma_explain.jpg>
 
 
-[6]
-File: assets/output_0.45.png Graphic file (type bmp)
-<assets/output_0.45.png>
+[14]
 
-
-[7]
+[15]
 File: assets/output_2.2.png Graphic file (type bmp)
 <assets/output_2.2.png>
+File: assets/display_2.2.jpg Graphic file (type bmp)
+<assets/display_2.2.jpg>
 ) (./chptr3.tex
 
-[8]
+[16]
 第 3 章
-File: assets/split_matrix.png Graphic file (type bmp)
-<assets/split_matrix.png>
-
-
-[9
-
-]
 File: assets/flicker_pattern.png Graphic file (type bmp)
 <assets/flicker_pattern.png>
 
 
-[10]) (./chptr4.tex
+[17
 
-[11]
+]
+File: assets/split_matrix.png Graphic file (type bmp)
+<assets/split_matrix.png>
 
-[12]
+
+[18]
+
+[19]) (./chptr4.tex
+
+[20]
 第 4 章
 ) (out/main_YOURNAME_paper20XX.bbl
 
-[13
+[21
 
 ]
 
-[14
+[22
 
 ]
 
@@ -275,24 +314,24 @@ LaTeX Warning: Empty `thebibliography' environment on input line 3.
 
 )
 
-[15]
+[23]
 
-[16
+[24
 
 ]
 
-[17]
+[25]
 
-[18
+[26
 
 ]
 LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <10.95> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 283.
+(Font)              Font shape `JT1/gt/m/n' tried instead on input line 282.
 LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <10.95> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 283.
+(Font)              Font shape `JY1/gt/m/n' tried instead on input line 282.
 
 
-[19] (out/main_YOURNAME_paper20XX.aux)
+[27] (out/main_YOURNAME_paper20XX.aux)
  ***********
 pLaTeX2e <2023-02-14>+1, based on
 LaTeX2e <2025-06-01> patch level 1
@@ -300,12 +339,12 @@ L3 programming layer <2025-09-02>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 2017 strings out of 468392
- 31428 string characters out of 5442309
- 436538 words of memory out of 5000000
- 30681 multiletter control sequences out of 15000+600000
- 645025 words of font info for 108 fonts, out of 8000000 for 9000
+ 2073 strings out of 468392
+ 32761 string characters out of 5442309
+ 441538 words of memory out of 5000000
+ 30727 multiletter control sequences out of 15000+600000
+ 647418 words of font info for 119 fonts, out of 8000000 for 9000
  929 hyphenation exceptions out of 8191
- 57i,11n,65p,266b,348s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 57i,12n,65p,635b,348s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on out/main_YOURNAME_paper20XX.dvi (26 pages, 27124 bytes).
+Output written on out/main_YOURNAME_paper20XX.dvi (34 pages, 71380 bytes).

@@ -1,8 +1,9 @@
 %/**********************************************************************/
 %		第2章：マトリクスLED表示システムの構築
 %/**********************************************************************/
-\chapter{マトリクスLED表示システムの構築}
+\chapter{LEDマトリクスパネルを用いた画像表示システムの構築}
 \label{lbl_chptr3}
+本章では、LEDマトリクスパネルの基本的な仕様を理解した上で、独自の画像表示システムを構築する．256階調での画像表示システムの構築を始めとし、遠隔地から画像をアップロードして表示を行えるシステムや、ガンマ補正を適用した画像表示の品質向上を目指す．
 
 
 %======================================================================
@@ -14,7 +15,16 @@
 Raspberry Piを中心とした開発環境についてまとめる．
 
 \subsection{HUB75 64×32 LEDマトリクスの仕様}
-% マトリクスの仕様について説明する。
+
+本研究では、HUB75インタフェースを採用した64×32ピクセルのLEDマトリクスパネルを使用した．
+HUB75は、RGB LEDマトリクスパネルを制御するための標準的なインタフェース規格である．
+本システムでは、64列×32行の合計2,048個のRGB LEDを制御し、
+各LEDは赤（R）、緑（G）、青（B）の3色を独立に制御できる．
+
+HUB75インタフェースは、データ信号、クロック信号、ラッチ信号、出力イネーブル（OE）信号、
+行アドレス信号などから構成され、高速な走査制御を実現する．
+本システムでは、このHUB75インタフェースを用いて120Hz相当のフレーム更新を実現し、
+可視光通信の送信端末として機能させる．
 
 
 \begin{figure}[H]
@@ -24,31 +34,191 @@ Raspberry Piを中心とした開発環境についてまとめる．
   \label{fig:matrix_led}
 \end{figure}
 
-\subsection{Raspberry Pi，Webサーバ構成}
+\subsection{Raspberry Pi 4と開発環境}
 
-本小節では，Raspberry Pi上での開発環境構成について述べる．
-LEDパネル制御コードとWebサーバ（画像アップロード用）の配置関係を示す．
-さらに，LAN内のPCやスマートフォンからブラウザ経由で画像を送信し，
-Raspberry Pi側で受信・変換してパネルに表示するまでの役割分担を簡潔に整理する．
+本研究では、Raspberry Pi 4 Model Bを制御用コンピュータとして使用した．
+Raspberry Pi 4は、ARMアーキテクチャを採用したシングルボードコンピュータであり、
+GPIO（General Purpose Input/Output）ピンを用いてHUB75インタフェースのLEDマトリクスパネルを直接制御することが可能である．
+本システムでは、Raspberry Pi 4上でC言語によるLEDパネル制御プログラムを実行し、
+高速な点滅制御を実現している．
+また、Python環境を併用して、Webサーバの動作もRaspberry Pi 4上で実現している．
+
+Raspberry Pi 4 Model Bの主要仕様を表\ref{tab:raspberry_pi_spec}\protect\footnotemark[1]に示す．
+
+\begin{table}[H]
+  \centering
+  \caption{Raspberry Pi 4 Model Bの主要仕様}
+  \label{tab:raspberry_pi_spec}
+  \begin{tabular}{|l|p{10cm}|}
+    \hline
+    \multicolumn{2}{|c|}{\textbf{基本仕様}} \\
+    \hline
+    販売元 & element14 \\
+    \hline
+    製品型番 & SC0195/0765756931199 \\
+    \hline
+    リビジョン & 1 \\
+    \hline
+    SoC & Broadcom BCM2711 \\
+    \hline
+    CPU & 1.5GHz クアッドコア Cortex-A72（ARMv8、64bit、L1=データ用32KB 命令用48KB/Core、L2=1MB） \\
+    \hline
+    GPU & デュアルコア VideoCore VI® 500MHz、OpenGL ES 3.0対応、ハードウェアOpenVG対応、H.265（HEVC）4Kp60 デコード、H.264 1080p60 デコード / 1080p30 エンコード \\
+    \hline
+    メモリー & 8GB LPDDR4-3200 SDRAM \\
+    \hline
+    電源 & USB type Cソケット 5V 3.0A / 2.54mm ピンヘッダー / PoE（要オプションPoE HAT） \\
+    \hline
+    消費電力（本製品単体） & アイドル：約3W、ストレス：約6.25W \\
+    \hline
+    サイズ & 85 × 56 × 18mm \\
+    \hline
+    生産国 & 英国 \\
+    \hline
+    \multicolumn{2}{|c|}{\textbf{インターフェース}} \\
+    \hline
+    イーサネット & 10/100/1000 Base-T RJ45 ソケット （BCM54213PE） \\
+    \hline
+    無線LAN（WiFi） & IEEE 802.11 b/g/n/ac 2.4/5GHz デュアルバンド （Cypress CYW43455） \\
+    \hline
+    Bluetooth & Bluetooth 5.0, Bluetooth Low Energy （Cypress CYW43455） \\
+    \hline
+    ビデオ出力 & micro HDMI ×2、コンポジット 3.5mm 4極ジャック（PAL、NTSC）、DSI 2-lane（15pin 1mmピッチ） \\
+    \hline
+    オーディオ出力 & 3.5mm 4極ジャック、micro HDMI（ビデオ出力と共有）×2、I2Sピンヘッダー \\
+    \hline
+    カメラ入力 & 2-lane MIPI CSI（15pin 1mmピッチ） \\
+    \hline
+    USB & USB 2.0 × 2、USB 3.0 × 2 （VIA VL805 PCIe） \\
+    \hline
+    GPIO コネクター & 40ピン 2.54mm ピンヘッダー（GPIO×26 3.3V 16mA、UART、I2C、SPI、I2S、PWM、5V出力（使用電源に依存）、3.3V出力 50mA（GPIO信号との総和）） \\
+    \hline
+    メモリー カード スロット & micro SDメモリーカード（SDIO） \\
+    \hline
+  \end{tabular}
+\end{table}
+\footnotetext{\texttt{https://raspberry-pi.ksyic.com/?pdp.id=552} より引用}
+
+%======================================================================
+% 2.2 画像アップロードシステムとネットワーク構成
+%======================================================================
+\section{画像アップロードシステムとネットワーク構成}
+
+本節では、遠隔地から画像をアップロードしてLEDマトリクスパネルに表示するための
+Webアプリケーションとネットワーク構成について説明する．
+
+\subsection{Webアプリケーション構成（Django）}
+
+画像のアップロードと表示制御のためのWebアプリケーションとして、
+Djangoフレームワークを用いたWebサーバを構築した．
+Djangoは、Pythonで記述されたWebフレームワークであり、
+画像アップロード機能、ファイル管理、APIエンドポイントの実装を容易に実現できる．
+本システムでは、Djangoを用いて画像アップロード用のWebインタフェースを提供し、
+アップロードされた画像をRaspberry Pi 4上で処理してLEDマトリクスパネルに表示する．
+
+\subsection{Cloudflare Tunnelによる外部アクセス}
+
+本システムでは、Cloudflare Tunnelを用いてRaspberry Pi 4上で動作する
+Django Webアプリケーションに外部からアクセスできるようにした．
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\linewidth]{assets/cloudflare_tunnel.png}
+  \caption{Cloudflare Tunnelの概要図\protect\footnotemark}
+  \label{fig:cloudflare_tunnel}
+\end{figure}
+\footnotetext{https://blog.cloudflare.com/getting-cloudflare-tunnels-to-connect-to-the-cloudflare-network-with-quic より引用}
+Cloudflare Tunnelは、Cloudflareが提供するトンネリングサービスであり、
+パブリックIPアドレスやポート開放なしに、ローカルネットワーク内のサービスを
+インターネット経由でアクセス可能にする．
+これにより、Raspberry Pi 4が設置されているローカルネットワークの設定を変更することなく、
+外部のPCやスマートフォンからブラウザ経由で画像をアップロードし、
+LEDマトリクスパネルに表示することが可能となった．
+
+\subsection{Webシステムの構成}
+
+今回は、独自でWebサイトを構築した。なお、WebサイトのデプロイにはVercelというサービスを使用した。
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\linewidth]{assets/web_site.png}
+  \caption{Webサイトの画面}
+  \label{fig:web_site}
+\end{figure}
+このサイトでは、画像をアップロードして、パネルに表示することができる。このサイトでは画像ファイルをアップロードするとその画像はBase64形式にエンコードされ、Raspberry Piで構築しているDjango Webアプリケーションに送信される。
+
+そして、Django Webアプリケーションでは、常にRestAPIでのリクエストを受け付けて、WebサイトからBase64形式の画像を受け取り、デコードした後に、C言語で作成したプログラムの実行を呼び出すようにした。
+C言語で作成したプログラムでは、リサイズした画像をパネルに表示するようにした。
+これにより、Webサイトから画像をアップロードして、パネルに表示することができるようになった。
+
+
+\subsection{Webサイトからの画像アップロード〜パネル表示までの処理フロー}
+
+本システムでは、Webサイトから画像をアップロードして、パネルに表示するシステムを構築した。
+これにより、遠隔地から画像をアップロードしてパネルに表示することが可能となった。
+本システムの全体構成を以下に示す．
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\linewidth]{assets/cloudflare_system.png}
+  \caption{システム全体の構成}
+  \label{fig:cloudflare_system}
+\end{figure}
+ユーザーは、PCやスマートフォンのWebブラウザからCloudflare Tunnel経由で
+Django Webアプリケーションにアクセスし、画像をアップロードする．
+アップロードされた画像は、Raspberry Pi 4上で処理され、
+リサイズやガンマ補正などの画像変換が行われる．
+変換された画像データは、C言語で実装されたLEDパネル制御プログラムに渡され、
+HUB75インタフェースを通じてLEDマトリクスパネルに表示される．
+この一連の処理フローにより、遠隔地からでもLEDマトリクスパネルの表示内容を
+制御することが可能となっている．
+
+具体的には、以下のような流れで処理を行った．
+\begin{enumerate}
+  \item Webサイトから画像をアップロードする．
+  \item アップロードされた画像をリサイズする．
+  \item リサイズされた画像をパネルに表示する．
+\end{enumerate}
 
 
 %======================================================================
-% 2.2 256階調表示システム
+% 2.3 256階調表示システム
 %======================================================================
 \section{256階調表示システム}
+本節では、256階調表示システムの構築について説明する．画像のリサイズから点灯制御まで、どのような方法で処理を行ったかを説明する．
 
 \subsection{RGB各色の点灯回数制御による256階調表現}
 
-本小節では，PWMもしくは時間多重方式を用いて1フレーム内の点灯／消灯パターンを設計し，
-RGB各色8bit相当の輝度を表現する手法を概略で説明する．
-ビットプレーンごとの重み付けや，実際のフレームレートとの関係を整理し，
-どの程度の時間分解能があれば256階調表示が成立するかを述べる．
+RGB各色を点灯回数制御により256階調で表示するシステムを構築する．
+HUB75では、一つのLEDでR,G,Bの3色をそれぞれ点灯させるかしないかを独立に制御が可能である．その仕様を利用して、R,G,Bそれぞれの点灯回数で256階調を表現する．
+
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.8\linewidth]{assets/256gradation.png}
   \caption{RGB各色の点灯回数制御による256階調表現}
   \label{fig:gradation}
 \end{figure}
+例えば、図2.4の例では、(R,G,B)=(92,225,230)の場合は、256階調のうち92回Rを点灯させ、225回Gを点灯させ、230回Bを点灯させることで表現が可能である．
+
+\subsection{点灯させるタイミングの計算方法}
+当初は、1フレームを256スロットに分割し、各スロットにおける点灯（ON/OFF）を整数演算で決定することで、8bit（0--255）の輝度値$R$を時間方向の点灯回数として表現する方式を検討した。しかし、この「フレームを256分割する」という設計には主に2つの問題があることが分かった。
+
+第一に、256分割をそのままフレーム設計に直結させると、スロット更新周波数が過度に高くなる点である。例えば表示更新を60 Hzのフレームとして固定した場合、内部のスロット更新は$60 \times 256 = 15{,}360$ Hzとなり、輝度制御としては不必要に高い周波数となる。さらに、HUB75型LEDマトリクスは行走査（例：1/16スキャン）を伴うため、実際の表示は「フレーム」と「走査」の二重の時間構造を持つ。このため、「256分割＝1フレーム」という単純化は適切ではなく、以降は"フレーム"ではなく、行表示やOE有効期間に対応する"スロット"を輝度制御の基本単位として扱う方針に改めた。
+
+第二に、点灯タイミングを単純な整数除算や周期（例：$k = \lfloor 256/R \rfloor$）で決定する方式では、$R$が256の約数でない場合に点灯を時間的に均等配置できず、階調の線形性や画質が損なわれる点である。例えば$R=128$であれば「2回に1回点灯」のように等間隔配置が可能である一方、$R=200$のように256の約数でない値では、点灯間隔が不均一になりやすく、周期の噛み合わせによって縞やちらつきの原因にもなる。
+
+一般式は以下のようになる．
+\begin{equation}
+\mathrm{acc}_{n+1} = (\mathrm{acc}_n + R) \bmod 256
+\end{equation}
+ただし，$\mathrm{acc}_0 = 0$とする．
+ここで，$\mathrm{acc}_n$は$n$回目の点灯判定時の累積値，$R$は目標とする輝度値（0以上255以下の整数），$\mathrm{acc}_{n+1}$は次回の点灯判定時の累積値を表す．
+この式により，$\mathrm{acc}_{n+1}$が$\mathrm{acc}_n$より小さくなった場合（256のオーバーフローが発生した場合）に点灯させることで，256階調を均等に表現することができる．
+
+具体例として$R = 200$の場合を考える．初期値$\mathrm{acc}_0 = 0$とすると，各スロットの更新は$\mathrm{acc} \leftarrow \mathrm{acc} + 200$（mod 256）で進み，オーバーフローが発生したスロットで点灯する．例えば最初の15スロットでは，$\mathrm{acc}$は
+\begin{eqnarray}
+&& 0 \rightarrow 200 \rightarrow 144 \rightarrow 88 \rightarrow 32 \rightarrow 232 \rightarrow 176 \rightarrow 120 \nonumber \\
+&& \rightarrow 64 \rightarrow 8 \rightarrow 208 \rightarrow 152 \rightarrow 96 \rightarrow 40 \rightarrow 240 \rightarrow 184
+\end{eqnarray}
+と推移し，このうち$200 \rightarrow 144$，$144 \rightarrow 88$，$88 \rightarrow 32$のように値が減少する遷移がオーバーフローに対応する．したがって点灯列は「OFF, ON, ON, ON, OFF, ON, ON, ON, ON, OFF, ON, ON, ON, OFF, ON, $\ldots$」となる．これによって256階調を均等に点灯させ、256階調を表現することができる．
 
 \begin{figure}[H]
   \centering
@@ -56,8 +226,22 @@ RGB各色8bit相当の輝度を表現する手法を概略で説明する．
   \caption{RGB各色の点灯回数制御による256階調表現}
   \label{fig:cat_lighting}
 \end{figure}
+この写真では、カメラで綺麗に撮影できるように、実際よりも高い1000Hzの周波数で実行している。実際に点灯すると色が淡くてよくわからないものの、画像をしっかりと表示できていることが確認できた．
 
 \subsection{32×64画像へのリサイズとマッピング処理}
+今回は32×64の画像へリサイズするにあたり、各出力ピクセルが元画像上で占める領域を求め、その領域に含まれる画素のRGB値を単純平均する方法（ボックス平均）を採用した。具体的には、出力画像の座標$(x,y)$（$0 \leq x < 64$，$0 \leq y < 32$）に対して、元画像の幅を$W$、高さを$H$とすると、対応する入力領域を
+\begin{equation}
+x_0 = \left\lfloor \frac{xW}{64} \right\rfloor, \quad x_1 = \left\lfloor \frac{(x+1)W}{64} \right\rfloor, \quad y_0 = \left\lfloor \frac{yH}{32} \right\rfloor, \quad y_1 = \left\lfloor \frac{(y+1)H}{32} \right\rfloor
+\end{equation}
+で定義し、この矩形領域$[x_0, x_1) \times [y_0, y_1)$に含まれる全画素のRGB値を加算して画素数で除算することで、出力画素の値を得る。RGBの各成分は独立に平均し、
+\begin{eqnarray}
+R'(x,y) &=& \frac{1}{N} \sum_{(i,j) \in \Omega(x,y)} R(i,j) \\
+G'(x,y) &=& \frac{1}{N} \sum_{(i,j) \in \Omega(x,y)} G(i,j) \\
+B'(x,y) &=& \frac{1}{N} \sum_{(i,j) \in \Omega(x,y)} B(i,j)
+\end{eqnarray}
+とした。ここで$\Omega(x,y)$は上記入力領域に含まれる画素集合、$N$はその画素数である。リサイズ後のRGB値は、C言語上で定義したRGB構造体配列に格納し、LEDマトリクスパネル表示処理に入力する。
+
+実際に以下の図 2.6 のような画像をリサイズした結果を図 2.7 に示す．
 
 \begin{figure}[H]
   \centering
@@ -73,44 +257,41 @@ RGB各色8bit相当の輝度を表現する手法を概略で説明する．
   \label{fig:resized_cat}
 \end{figure}
 
-\subsection{Webサイトからの画像アップロード〜パネル表示までの処理フロー}
-
-本小節では，ユーザがWebブラウザ上のフォームから画像をアップロードしてから，
-LEDパネルに表示されるまでの処理フローを時系列に沿って記述する．
-HTTPリクエストの受付，ファイル保存，画像変換・リサイズ，フレームバッファ生成，
-そしてHUB75パネルへの出力までの各段階でどのような処理を行うかを概要レベルで説明する．
-（SONOBE\_poster\_20250718の内容を整理し直して文章化する想定である．）
-
-
 %======================================================================
 % 2.3 表示品質評価
 %======================================================================
-\section{表示品質評価}
+\section{ガンマ補正による画質改善}
 
-本節では，構築した256階調表示システムを用いて，実際にさまざまな画像を表示した際の
-画質について評価する．
-再現しやすかった画像と難しかった画像の例を挙げ，人間の目で見た主観的な画質を中心に議論する．
-
-\subsection{はじめに}
-
-\subsection{淡い色が表現しにくい要因の考察}
-
+本節では，実際に画像を表示した際に色が淡くてよくわからない問題について原因を調査し、ガンマ補正を行って画質を改善する方法について説明する．
 
 \subsection{ガンマ補正}
+ガンマ補正とは、画像の輝度を補正するための手法である．通常のディスプレイではガンマ2.2の補正が行われているため、画像ファイルは内部的にガンマ0.45の補正が行われている。しかし、LEDマトリクスパネルではこの補正が行われないため、元の画像よりも淡く表示される問題が発生していた。
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.8\linewidth]{assets/gamma.png}
-  \caption{ガンマ補正の原理}
-  \label{fig:gamma}
+  \includegraphics[width=0.8\linewidth]{assets/gamma_explain.jpg}
+  \caption{ガンマ補正の原理\protect\footnotemark}
+  \label{fig:gamma_explain}
 \end{figure}
+\footnotetext{\texttt{https://www.eizo.co.jp/eizolibrary/other/itmedia02\_07/} より引用}
 
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.8\linewidth]{assets/output_0.45.png}
-  \caption{ガンマ0.45補正画像}
-  \label{fig:gamma_0.45}
-\end{figure}
+図2.9を見てわかる通り、通常の画像ファイルはガンマ0.45の補正が行われている。この補正によって通常の見た目よりも淡くなる。この補正がかかっている状態でディスプレイに表示することで、ガンマ2.2の補正が行われ、明度は線形になる。しかし、LEDマトリクスパネルではこの補正が行われないため、ガンマ0.45のまま表示していたことで、元の画像よりも淡く表示される問題が発生していた。
+
+そこで本研究では、LEDマトリクスパネル上で元画像と近い見た目を得るために、画像データをパネルへ出力する前段で\textbf{逆ガンマ補正（ガンマデコード）}を行った。具体的には、リサイズ後の各画素のRGB値（0--255）を0--1の範囲に正規化し、各成分$s$に対して
+\begin{equation}
+L = s^{2.2}
+\end{equation}
+を適用したうえで、再び0--255にスケーリングして整数化し、LED表示用のRGB構造体配列に格納した。実装上は、画素値$R$，$G$，$B$をそれぞれ
+\begin{equation}
+s_R = \frac{R}{255}, \quad s_G = \frac{G}{255}, \quad s_B = \frac{B}{255}
+\end{equation}
+とし、
+\begin{eqnarray}
+R' &=& \mathrm{round}(255 \cdot s_R^{2.2}) \\
+G' &=& \mathrm{round}(255 \cdot s_G^{2.2}) \\
+B' &=& \mathrm{round}(255 \cdot s_B^{2.2})
+\end{eqnarray}
+として求めている。これにより、通常はディスプレイ側で行われているガンマ2.2の補正をソフトウェア側で補い、LEDマトリクスパネル上でも元画像に近い明度分布を再現できるようにした。実際にこの方法でガンマ補正を行った結果は以下の図2.10の通りである。
 
 \begin{figure}[H]
   \centering
@@ -119,7 +300,13 @@ HTTPリクエストの受付，ファイル保存，画像変換・リサイズ�
   \label{fig:gamma_2.2}
 \end{figure}
 
-%======================================================================
-% 2.4 小括
-%======================================================================
-\section{小括}
+また、これを実際にパネルに表示した結果は以下の図2.11の通りである。
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\linewidth]{assets/display_2.2.jpg}
+  \caption{ガンマ2.2補正画像（パネル表示）}
+  \label{fig:panel_gamma_2.2}
+\end{figure}
+
+写真越しにみると、あまり綺麗に見えないが、実際にパネルに表示した結果を見ると、ガンマ2.2補正を行ったことで、補正を行っていない画像よりもより鮮明に綺麗に表示されていることが確認できた。
